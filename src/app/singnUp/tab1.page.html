@@ -1,0 +1,44 @@
+   <ion-header>
+     <ion-toolbar color="primary">
+       <ion-title class="ion-text-center">
+         Registro
+       </ion-title>
+     </ion-toolbar>
+   </ion-header>
+
+   <ion-content>
+     <ion-card>
+       <ion-card-header>
+         <ion-card-subtitle>Ingrese sus dsatos:</ion-card-subtitle>
+       </ion-card-header>
+       <ion-card-content>
+         <ion-item>
+           <ion-label position="floating">Nombre</ion-label>
+           <ion-input (change)="errorName()" type="text" [(ngModel)]="User.name"></ion-input>
+         </ion-item>
+         <ion-label *ngIf="!correctName" color="red">
+           <ion-icon name="alert"></ion-icon>Nombre Invalido
+         </ion-label>
+         <ion-item>
+           <ion-label position="floating">Correo</ion-label>
+           <ion-input (change)="errorEmail()" type="email" [(ngModel)]="User.email"></ion-input>
+         </ion-item>
+         <ion-label *ngIf="!corretEmail" color="red">
+           <ion-icon name="alert"></ion-icon>Correo Invalido
+         </ion-label>
+         <ion-item>
+           <ion-label position="floating">Contraeña</ion-label>
+           <ion-input (change)="errorPassword()" type="password" [(ngModel)]="User.password"></ion-input>
+         </ion-item>
+         <ion-label *ngIf="!corretPassword" color="red">
+           <ion-icon name="alert"></ion-icon>Contraseña Invalida
+         </ion-label>
+         <ion-label *ngIf="corretPassword=='low'" color="red">
+           <ion-icon name="alert"></ion-icon>Contraeeña Débil
+         </ion-label>
+         <ion-button expand="block" (click)="submit()">Registrarse</ion-button>
+         Ya tienes cuenta? <a [routerLink]="['/Home/Login']">Iniciar Sesión</a>
+       </ion-card-content>
+     </ion-card>
+
+   </ion-content>
