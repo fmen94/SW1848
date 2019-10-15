@@ -1,9 +1,20 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
+  <ion-toolbar  color="primary">
+    <ion-title class="ion-text-center"  >
      Hola {{User.name}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Tu correo es:</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      {{User.email}} y se actualiza cada 10 segundos 
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

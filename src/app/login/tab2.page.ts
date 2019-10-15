@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { valideteEmail, validetePassword } from '../helpers/validateInputs.helper';
-
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AlertController } from '@ionic/angular';
+import { AuthService } from '../services/auth.service'
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
@@ -9,19 +11,30 @@ import { valideteEmail, validetePassword } from '../helpers/validateInputs.helpe
 })
 export class Tab2Page implements OnInit{
 
+
   User: User ={}
   corretEmail : boolean =true
   corretPassword : string | boolean = true
   correctName:  string | boolean = true
+  logError: boolean = false
   constructor(
+    public alertController: AlertController,
+    private auth: AuthService,
     private router: Router
   ) {}
   submit(){
     if(this.errorEmail() 
     &&this.errorPassword()){
-      console.log("login en base de datos");
-      localStorage.setItem("User",JSON.stringify(this.User))
-      return this.router.navigate(['/Home/Profile'])
+    this.auth.loginService(this.User)
+      .subscribe(e=>{
+        console.log(e);
+
+        if(e.length){
+          localStorage.setItem("User",JSON.stringify(e[0]))
+          return this.router.navigate(['/Home/Profile'])
+        }
+        else return this.alertLoginIncorrect()
+      })
     } 
     return
   }
@@ -31,10 +44,22 @@ export class Tab2Page implements OnInit{
   errorPassword(){
     return this.corretPassword = validetePassword(this.User.password)
   }
+  async alertLoginIncorrect() {
+    const alert = await this.alertController.create({
+      header: 'Usuario o contraseña incorrecta',
+      message: 'Intente de nuevo',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
   ngOnInit() {
+    if(localStorage.getItem("User")){
+      this.router.navigate(['/Home/Profile'])
+    } 
     this.User=
-    localStorage.getItem("User")? 
-     JSON.parse( localStorage.getItem("User")) : {}
+    localStorage.getItem("UserCreated")? 
+     JSON.parse( localStorage.getItem("UserCreated")) : {}
   }
 
 }

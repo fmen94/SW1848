@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-tabs',
@@ -6,7 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage implements OnInit{
-  openSession: boolean = false
+
+ 
+  openSession: boolean = false;
+  
+  
   constructor() {}
   logOut(){
     this.openSession = false

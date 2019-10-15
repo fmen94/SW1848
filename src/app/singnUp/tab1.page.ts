@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { valideteEmail, validetePassword, valideteName } from '../helpers/validateInputs.helper';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service'
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -14,18 +16,36 @@ export class Tab1Page implements OnInit   {
   corretPassword : string | boolean = true
   correctName:  string | boolean = true
   constructor(
-    private router: Router
+    public alertController: AlertController,
+    private router: Router,
+    private auth :AuthService
   ) {}
   submit(){
     if(this.errorEmail() 
     &&this.errorPassword() 
     &&this.errorName()){
-      console.log("Create en base de datos");
-      localStorage.setItem("User",JSON.stringify(this.User))
-      //let user = JSON.parse( localStorage.getItem("User"))
-      return this.router.navigate(['/Home/Login'])
+      this.auth.sginUpService(this.User).subscribe(e=>{
+        if(e.empty){
+          return this.auth.createUserService(this.User)
+          .then(e=>{
+               this.User.id= e.id
+               localStorage.setItem("UserCreated",JSON.stringify(this.User))
+               return this.router.navigate(['/Home/Login'])
+         })
+        }else {
+          this.alertSingIncorrect()
+        }
+      })
     } 
     return
+  }
+  async alertSingIncorrect() {
+    const alert = await this.alertController.create({
+      header: 'Usuario ya exitente',
+      message: 'Intente de nuevo',
+      buttons: ['OK']
+    });
+    await alert.present();
   }
   errorEmail(){ 
     return this.corretEmail = valideteEmail(this.User.email)
@@ -37,7 +57,8 @@ export class Tab1Page implements OnInit   {
     return this.correctName = valideteName(this.User.name)
   }
   ngOnInit() {
-    localStorage.getItem("User")? 
-    this.router.navigate(['/Home/Profile']) : null    
+    if(localStorage.getItem("User")){
+      this.router.navigate(['/Home/Profile'])
+    } 
   }
 }
