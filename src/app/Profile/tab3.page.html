@@ -1,20 +1,28 @@
 <ion-header>
   <ion-toolbar  color="primary">
-    <ion-title class="ion-text-center"  >
+    <ion-title class="ion-text-center" *ngIf="User" >
      Hola {{User.name}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card *ngIf="User">
     <ion-card-header>
       <ion-card-title>Tu correo es:</ion-card-title>
     </ion-card-header>
   
     <ion-card-content>
-      {{User.email}} y se actualiza cada 10 segundos 
+      {{User.email }} y se actualiza cada 10 segundos 
     </ion-card-content>
   </ion-card>
-
+  <ion-card *ngIf="User">
+    <ion-card-header>
+      <ion-card-title>Ultima actualización:</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      {{User.timestamp}}
+    </ion-card-content>
+  </ion-card>
 </ion-content>
